@@ -1,0 +1,15 @@
+# of characters:		GNB: 0.564, 0.721	KNeighbor: 0.512, 0.596
+# of words:	 		GNB: 0.564, 0.721	KNeighbor: 0.508, 0.547
+# of Verbs:			GNB: 0.564, 0.721	KNeighbor: 0.525, 0.640
+# of Nouns:			GNB: 0.564, 0.721	KNeighbor: 0.474, 0.456
+# of sentence:			GNB: 0.564, 0.721	KNeighbor: 0.443, 0.143
+Avg. # of words per sentence:	GNB: 0.564, 0.721	KNeighbor: 0.515, 0.562
+Avg. # of characters in words:	GNB: 0.558, 0.706	KNeighbor: 0.486, 0.559
+# of question marks:		GNB: 0.567, 0.722	KNeighbor: 0.568, 0.722
+% of subjective verbs:		GNB: 0.561, 0.715	KNeighbor: 0.565, 0.720
+% of passive voice:		GNB: 0.436, 0.000??	KNeighbor: 0.564, 0.721
+% of positive words:		GNB: 0.568, 0.713	KNeighbor: 0.549, 0.695
+% of negative words:		GNB: 0.562, 0.718	KNeighbor: 0.537, 0.672
+Lexical diversity (unique words or terms):	GNB: 0.564, 0.721	KNeighbor: 0.475, 0.507
+Typographical error ration (misspelled words):	GNB: 0.435, 0.003	KNeighbor: 0.564, 0.721
+Causation terms:		GNB: 0.564, 0.721	KNeighbor: 0.564, 0.721
