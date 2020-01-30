@@ -12,4 +12,15 @@ Our team of four set out to:
 - design features that can improve prediction accuracy of current models
 - implement machine learning models that can take text input and output prediction results
 
+## Getting Started
+- instruction to run the clone
+
+### Prerequisites
+- Anaconda
+
+## License
+This project is licensed under the MIT License.
+
+## Acknowledgements
+- flc
 
