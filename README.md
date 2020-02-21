@@ -22,5 +22,5 @@ Our team of four set out to:
 This project is licensed under the MIT License.
 
 ## Acknowledgements
-- flc
+- FLC
 
