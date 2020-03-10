@@ -24,8 +24,9 @@ Our team of four set out to:
 - model-testing takes in input text content (string) and outputs the true/false status of the text content based on trained model within notebook
 
 ### Prerequisites
-- jupyter notebook
+- Python 3
+- Jupyter Notebook
 
 ## Acknowledgements
-- FLC
+- FLC: Dr. E. Bagheri
 
