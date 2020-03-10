@@ -17,9 +17,9 @@ Our team of four set out to:
 ## Getting Started
 - clone current repository and run the .ipynb file in jupyter notebook
 - data-exploration takes input dataset, and outputs graphical and numerical analysis results on the dataset values within notebook
-- data-cleaning takes input dataset(csv), and outputs cleaned input data(csv)
-- feature-extraction takes in cleaned input data(csv), and outputs extracted feature sets(csv)
-- feature-selection takes in feature set(csv) and outputs selected feature set based on set criterias that reduces dimensionality and improves performance of potential models (csv)
+- data-cleaning takes input dataset(csv), and returns cleaned input data as dataframe, also outputs (csv)
+- feature-extraction takes in cleaned input data(csv), and returns extracted feature sets as dataframe, also outputs(csv)
+- feature-selection takes in feature set(csv) and returns selected feature set dataframe, based on set criterias that reduces dimensionality and improves performance of potential models, also outputs csv
 - model-building is the top-level script that takes in input raw dataset(csv), and generate a trained model along with tested accuracy results shown within notebook (joblib)
 - model-testing takes in input text content (string) and outputs the true/false status of the text content based on trained model within notebook
 
