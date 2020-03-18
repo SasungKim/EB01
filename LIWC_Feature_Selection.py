@@ -1,4 +1,3 @@
-
 import requests
 import numpy as np
 import pandas as pd
@@ -78,19 +77,6 @@ valid = pd.read_csv('valid_feature.csv', delimiter = ',', names = header,  encod
 valid = valid.drop(0)
 
 k=15
-'''
-cols = [col for col in train.columns if col not in ['Unnamed: 0', 'Label', 'Statement']]
-X_train = train[cols]
-Y_train = train['Label']
-bestfeatures = SelectKBest(score_func=chi2, k=10)
-fit = bestfeatures.fit(X_train,Y_train)
-dfscores = pd.DataFrame(fit.scores_)
-dfcolumns = pd.DataFrame(X_train.columns)
-#concat two dataframes for better visualization 
-featureScores = pd.concat([dfcolumns,dfscores],axis=1)
-#featureScores.columns = ['Specs','Score']  #naming the dataframe columns
-print(featureScores.nlargest(10,'Score'))
-'''
 cols = [col for col in train.columns if col not in ['Unnamed: 0', 'Label', 'Statement']]
 
 
@@ -99,29 +85,47 @@ cols = [col for col in train.columns if col not in ['Unnamed: 0', 'Label', 'Stat
 #--------------------------------------
 
 X = train[cols]
-Y = test.Label
+Y = train.Label
 
-bestfeatures = SelectKBest(score_func=chi2, k=10)
+LE = preprocessing.LabelEncoder()
+train['Label'] = LE.fit_transform(train['Label'])
+test['Label'] = LE.fit_transform(test['Label'])
+valid['Label'] = LE.fit_transform(valid['Label'])
+
+
+bestfeatures = SelectKBest(score_func=chi2, k=15)
 fit = bestfeatures.fit(X,Y)
 dfscores = pd.DataFrame(fit.scores_)
 dfcolumns = pd.DataFrame(X.columns)
 featureScores = pd.concat([dfcolumns,dfscores],axis=1)
 featureScores.columns = ['Features','Score']  #naming the dataframe columns
 print(featureScores.nlargest(15,'Score'))
+features = pd.DataFrame(featureScores.nlargest(15,'Score'))
+features_list = features.Features.tolist()
 
-new_cols = [col for col in train.columns if col not in ['Unnamed: 0', 'Label', 'Statement','relativ','function'
-                                                    'space','compare','adj','prpe','time','negemo',
-                                                    'focusfuture','differ','bio','article','risk'
-                                                    'adver','quant']]
+
+new_cols = [col for col in train.columns if col in [features_list[0],features_list[1],features_list[2],features_list[3],
+                                                    features_list[4],features_list[5],features_list[6],features_list[7],
+                                                    features_list[8],features_list[9],features_list[10],features_list[11],
+                                                    features_list[12],features_list[13],features_list[14]]]
+
+LE = preprocessing.LabelEncoder()
 
 X_train = train[new_cols]
+X_train = preprocessing.scale(X_train)
 Y_train = train['Label']
 
+
 X_test = test[new_cols]
+X_test = preprocessing.scale(X_test)
 Y_test = test['Label']
 
+
 X_valid = valid[new_cols]
+X_valid = preprocessing.scale(X_valid)
 Y_valid = valid['Label']
+
+
 
 #Predict on test.csv
 kn = KNeighborsClassifier(n_neighbors = 3)
@@ -144,32 +148,59 @@ KN_valid.show()
 
 print("KNeighbors Accuracy: ", accuracy_score(Y_valid, pred_kn))
 #print("KNeighbors F1-Score: ", f1_score(Y_test, pred_kn))
+
+
+#Naives-Bayes Classification
+pipeline = make_pipeline(preprocessing.StandardScaler(), GaussianNB(priors=None))
+pred_nb = pipeline.fit(X_train, Y_train).predict(X_test)
+NB_test = ClassificationReport(pipeline, classes=['Fake', 'Not Fake'])
+NB_test.fit(X_train, Y_train)
+NB_test.score(X_test, Y_test)
+NB_test.show()
+
+print("NB Accuracy: ", accuracy_score(Y_test, pred_nb))
+
+NB_valid = ClassificationReport(pipeline, classes = ['Fake', 'Not Fake'])
+NB_valid.fit(X_train, Y_train)
+NB_valid.score(X_valid, Y_valid)
+NB_valid.show()
+
+print("NB Accuracy: ", accuracy_score(Y_test, pred_nb))
+#print("NB F1-Score: ", f1_score(Y_test, pred_nb))
+
 
 #--------------------------------------
 #--------Feature Importance------------
 #--------------------------------------
 '''
 X = train[cols]
-y = test.Label
+y = train.Label
 from sklearn.ensemble import ExtraTreesClassifier
 model = ExtraTreesClassifier()
 model.fit(X,y)
 print(model.feature_importances_) 
 feat_importances = pd.Series(model.feature_importances_, index=X.columns)
 feat_importances.nlargest(15).plot(kind='barh')
+features = feat_importances.nlargest(15)
+features.to_csv('selected_features.csv')
+features = pd.read_csv('selected_features.csv',delimiter = ',', names = ['Features','Importances'],encoding = 'utf-8-sig')
+features_list = features.Features.tolist()
 
-new_cols = [col for col in train.columns if col not in ['Unnamed: 0', 'Label', 'Statement','adj','auxverb',
-                                                        'focuspast','space','relativ','article','verb','social',
-                                                        'focuspresent','function','prep','pronoun','money',
-                                                        'conj','cogproc']]
+new_cols = [col for col in train.columns if col in [features_list[0],features_list[1],features_list[2],features_list[3],
+                                                    features_list[4],features_list[5],features_list[6],features_list[7],
+                                                    features_list[8],features_list[9],features_list[10],features_list[11],
+                                                    features_list[12],features_list[13],features_list[14]]]
 
 X_train = train[new_cols]
+X_train = preprocessing.normalize(X_train)
 Y_train = train['Label']
 
 X_test = test[new_cols]
+X_test = preprocessing.normalize(X_test)
 Y_test = test['Label']
 
 X_valid = valid[new_cols]
+X_valid = preprocessing.normalize(X_valid)
 Y_valid = valid['Label']
 
 #Predict on test.csv
@@ -194,7 +225,6 @@ KN_valid.show()
 print("KNeighbors Accuracy: ", accuracy_score(Y_valid, pred_kn))
 #print("KNeighbors F1-Score: ", f1_score(Y_test, pred_kn))
 '''
-
 #--------------------------------------
 #--------Correlation Heatmap-----------
 #--------------------------------------
